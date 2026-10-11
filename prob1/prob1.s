@@ -3,11 +3,12 @@
 .global is_multiple
 
 main:
-    # use %r12d and %r13d because they are callee saved (non-volatile)
-    # as opposed to volatile functions which are not guaranteed to survive a function call
+    # preserve non-volatile register values
+    pushq %r12
+    pushq %r13
+
     movl $0, %r12d   # int sum = 0
     movl $1, %r13d   # int i = 1
-
 .loop:
     cmpl $999, %r13d # compare i with upper bound
     jg .loop_end    # if i > 999, loop is over
@@ -21,9 +22,10 @@ main:
 .continue:
     addl $1, %r13d   # add one to i
     jmp .loop       # restard loop
-
 .loop_end:
     movl %r12d, %eax # move sum into return register
+    popq %r13
+    popq %r12
     ret             # end function
 
 is_multiple:
