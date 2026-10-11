@@ -16,12 +16,12 @@ main:
     movl %r13d, %ecx # move i into intermediate register
     call is_multiple # check if i is multiple of 3 or 5
     cmpl $0, %eax   # compare return register against 0 (0 indicates divisible 1 indicates not)
-    je .continue    # if not a multiple then restart loop with next i
+    je .continue    # if not a multiple then continue loop from top with next i
     
     addl %r13d, %r12d # if divisible then add i to sum
 .continue:
     addl $1, %r13d   # add one to i
-    jmp .loop       # restard loop
+    jmp .loop       # continue loop from top
 .loop_end:
     movl %r12d, %eax # move sum into return register
     popq %r13
