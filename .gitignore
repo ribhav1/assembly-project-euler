@@ -1,1 +1,8 @@
+# Compiled output
 *.exe
+*.o
+*.out
+
+# Linux executables
+/prob1/prob1
+/prob2/prob2

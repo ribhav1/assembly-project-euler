@@ -3,11 +3,10 @@
 
 main:
     # save non-volatile register values
-    pushq %rdi
-    pushq %rsi
     pushq %r12
     pushq %r13
     pushq %r14
+    # 3 pushes do leave the stack correctly aligned
 
     movl $0, %r12d  # sum = 0
     movl $1, %r13d  # fib1 = 1
@@ -23,8 +22,9 @@ main:
     cmpl $4000000, %r14d # compare newest fibonacci number to 4 million
     jg .done            # if newest number exceeds 4 million, loop is over
 
-    movl %r14d, %ecx    # move newest fibonacci number into input register for following function
+    movl %r14d, %edi    # move newest fibonacci number into input register for following function
     call is_even
+    
     cmpl $0, %eax       # check if even (return/remainder value 0)
     jne .loop           # if not 0 (not even) then continue loop from top
 
@@ -32,15 +32,14 @@ main:
     jmp .loop           # continue loop
 .done:
     movl %r12d, %eax    # move sum into return register
+    
     popq %r14
     popq %r13
     popq %r12
-    popq %rsi
-    popq %rdi
     ret
 
 is_even:
-    movl %ecx, %eax # move input into intermediate register
+    movl %edi, %eax # move input into intermediate register
     cltd
     movl $2, %edi   # mode divisor into intermediate register
     idivl %edi      # divide input by 2
